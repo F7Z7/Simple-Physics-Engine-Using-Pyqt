@@ -205,3 +205,36 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+# Qt / PyQt generated files
+*.pyc
+*.pyo
+*.pyd
+*.qrc
+*.qmlc
+*.jsc
+*.moc
+*.qtdsproj.user
+
+# Qt Designer auto-generated Python files
+ui_*.py
+
+# PyInstaller build artifacts (common when freezing PyQt apps)
+*.spec
+dist/
+build/
+*.exe
+*.app/
+*.dmg
+
+# Logs & runtime
+*.log
+*.tmp
+__pycache__/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+
+
+.xml
