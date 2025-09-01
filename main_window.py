@@ -33,6 +33,7 @@ class MainWindow(QMainWindow):
             btn.clicked.connect(fn)
             self.button_layout.addWidget(btn)
 
+        self.main_layout.addStretch(1)
         self.main_layout.addLayout(self.button_layout)
 
     def launch_btn(self):
