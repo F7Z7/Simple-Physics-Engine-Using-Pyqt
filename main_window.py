@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QMessageBox, QLabel, QLineEdit
 from projectile_functions import Projectile_Functions
 
 class MainWindow(QMainWindow):
@@ -6,9 +6,10 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Simple Physics Engine")
         self.resize(500, 500)
+        self.projectile = Projectile_Functions()
+        self.projectile.default_condtions(speed=20, deg_ang=45)
         self.show()
         self.initUI()
-        self.projectile = Projectile_Functions()
 
     def initUI(self):
         central_widget = QWidget()
@@ -36,6 +37,15 @@ class MainWindow(QMainWindow):
 
         self.main_layout.addStretch(1)
         self.main_layout.addLayout(self.button_layout)
+
+
+        self.stats_layout = QHBoxLayout()
+        stats_out=self.projectile.stats()
+        for name, stat in stats_out.items():
+            self.stats_layout.addWidget(QLabel(name))
+            line = QLineEdit(str(stat))
+            line.setReadOnly(True)
+            self.stats_layout.addWidget(line)
 
     def launch_btn(self,air_resistance):
         if air_resistance:
