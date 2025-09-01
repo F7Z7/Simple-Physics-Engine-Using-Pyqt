@@ -2,6 +2,8 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QMessageBox, QLabel, QLineEdit
 from projectile_functions import Projectile_Functions
 import pyqtgraph as pg
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -16,24 +18,20 @@ class MainWindow(QMainWindow):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
 
-        #flags
-        self.gravity=True
-        self.air_resistance=True
-
-
+        # flags
+        self.gravity = True
+        self.air_resistance = True
 
         self.main_layout = QVBoxLayout(central_widget)
 
         self.plot_widget = pg.PlotWidget()
         self.main_layout.addWidget(self.plot_widget)
 
-
         self.plot_widget.setBackground("w")
 
         # Create curve (trajectory line) and ball (point)
         self.curve = self.plot_widget.plot([], [], pen='r')
         self.ball = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='b')
-
 
         self.button_layout = QHBoxLayout()
         self.buttons = {
@@ -43,32 +41,32 @@ class MainWindow(QMainWindow):
             "Air Resistance": self.air_resistance_btn,
         }
 
-        for name,fn in self.buttons.items():
-            btn=QPushButton(name)
+        for name, fn in self.buttons.items():
+            btn = QPushButton(name)
             btn.clicked.connect(fn)
             self.button_layout.addWidget(btn)
 
         self.main_layout.addStretch(1)
         self.main_layout.addLayout(self.button_layout)
 
-
         self.stats_layout = QHBoxLayout()
-        stats_out=self.projectile.stats()
+        stats_out = self.projectile.stats()
         for name, stat in stats_out.items():
             self.stats_layout.addWidget(QLabel(name))
             line = QLineEdit(str(stat))
             line.setReadOnly(True)
             self.stats_layout.addWidget(line)
 
-        self.timer=QTimer()
+        self.timer = QTimer()
         self.timer.timeout.connect(self.update_position)
+
     def launch_btn(self):
         if self.air_resistance:
-            self.points=self.projectile.with_air_resistance()
+            self.points = self.projectile.with_air_resistance()
         else:
-            self.points=self.projectile.without_air_resistance()
+            self.points = self.projectile.without_air_resistance()
 
-#here the points are returned as an array of two x and y at index 0 and 1
+        # here the points are returned as an array of two x and y at index 0 and 1
         x_vals = [p[0] for p in self.points]
         y_vals = [p[1] for p in self.points]
 
@@ -78,6 +76,7 @@ class MainWindow(QMainWindow):
         self.timer.start(50)  # update every 50 ms
 
         print("Launching button")
+
     def reset_btn(self):
         self.gravity = True
         self.air_resistance = True
@@ -93,7 +92,6 @@ class MainWindow(QMainWindow):
         self.air_resistance = not self.air_resistance  # toggle
         state = "ON" if self.air_resistance else "OFF"
         print(f"💨 Air Resistance is now {state}")
-
 
     def update_position(self):
         if self.index < len(self.trajectory):
