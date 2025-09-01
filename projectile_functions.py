@@ -39,14 +39,14 @@ class Projectile_Functions():
         }
 
     def without_air_resistance(self, dt=0.1):
-        self.ax = 0
-        self.ay = -self.G
-        # interpolating the values of the trajectory
-        self.vx += self.ax * dt
-        self.vy += self.ay * dt
-
-        self.x += self.vx * dt
-        self.y += self.vy * dt
-
-        # this values will be given to the pyqt graph which will plot this
-        return self.x, self.y
+        points = []
+        self.vx = self.v * math.cos(self.angle)
+        self.vy = self.v * math.sin(self.angle)
+        self.x, self.y = 0, 0
+        while self.y >= 0:
+            self.vx += self.ax * dt
+            self.vy += self.ay * dt
+            self.x += self.vx * dt
+            self.y += self.vy * dt
+            points.append((self.x, self.y))
+        return points
