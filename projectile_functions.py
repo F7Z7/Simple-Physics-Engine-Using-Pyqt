@@ -31,6 +31,13 @@ class Projectile_Functions():
         R = (v0 ** 2 * math.sin(2 * theta)) / g
         vx = v0 * math.cos(theta)
 
+        return {
+            "Time of Flight": round(T, 3),
+            "Max Height": round(H, 3),
+            "Range": round(R, 3),
+            "Horizontal Velocity": round(vx, 3),
+        }
+
     def without_air_resistance(self, dt=0.1):
         self.ax = 0
         self.ay = -self.G
