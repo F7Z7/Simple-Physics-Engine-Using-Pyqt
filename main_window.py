@@ -127,7 +127,7 @@ class MainWindow(QMainWindow):
 
     def update_position(self):
         if self.index < len(self.trajectory):
-            x, y = self.trajectory[self.index]
+            x, y = self.points[self.index]
             self.ball.setData([x], [y])  # move ball
             self.index += 1
         else:
