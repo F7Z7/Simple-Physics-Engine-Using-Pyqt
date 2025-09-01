@@ -33,6 +33,23 @@ class MainWindow(QMainWindow):
         self.curve = self.plot_widget.plot([], [], pen='r')
         self.ball = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='b')
 
+        self.input_layout = QHBoxLayout()
+
+
+        self.input_layout.addWidget(QLabel("Angle"))
+        self.angle_input = QLineEdit()
+        self.angle_input.setPlaceholderText("Enter Launch Angle")
+        self.input_layout.addWidget(self.angle_input)
+
+
+        self.input_layout.addWidget(QLabel("Speed"))
+        self.speed_input = QLineEdit()
+        self.speed_input.setPlaceholderText("Enter Launch Velocity")
+        self.input_layout.addWidget(self.speed_input)
+
+
+        self.main_layout.addLayout(self.input_layout)
+
         self.button_layout = QHBoxLayout()
         self.buttons = {
             "Launch": self.launch_btn,
