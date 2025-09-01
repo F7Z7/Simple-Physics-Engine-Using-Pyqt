@@ -20,6 +20,16 @@ class Projectile_Functions():
     def with_air_resistance(self):
         pass
 
+    def stats(self):
+        v0 = self.v
+        theta = self.angle
+        g = self.G
+
+        # default equations
+        T = (2 * v0 * math.sin(theta)) / g
+        H = (v0 ** 2 * (math.sin(theta)) ** 2) / (2 * g)
+        R = (v0 ** 2 * math.sin(2 * theta)) / g
+        vx = v0 * math.cos(theta)
 
     def without_air_resistance(self, dt=0.1):
         self.ax = 0
