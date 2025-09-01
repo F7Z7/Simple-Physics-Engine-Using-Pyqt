@@ -1,3 +1,4 @@
+from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QMessageBox, QLabel, QLineEdit
 from projectile_functions import Projectile_Functions
 import pyqtgraph as pg
@@ -59,11 +60,22 @@ class MainWindow(QMainWindow):
             line.setReadOnly(True)
             self.stats_layout.addWidget(line)
 
+        self.timer=QTimer()
+        self.timer.timeout.connect(self.update_position)
     def launch_btn(self):
         if self.air_resistance:
-            self.projectile.with_air_resistance()
+            self.points=self.projectile.with_air_resistance()
         else:
-            self.projectile.without_air_resistance()
+            self.points=self.projectile.without_air_resistance()
+
+#here the points are returned as an array of two x and y at index 0 and 1
+        x_vals = [p[0] for p in self.points]
+        y_vals = [p[1] for p in self.points]
+
+        self.curve.setData(x_vals, y_vals)
+
+        self.index = 0
+        self.timer.start(50)  # update every 50 ms
 
         print("Launching button")
     def reset_btn(self):
@@ -81,3 +93,12 @@ class MainWindow(QMainWindow):
         self.air_resistance = not self.air_resistance  # toggle
         state = "ON" if self.air_resistance else "OFF"
         print(f"💨 Air Resistance is now {state}")
+
+
+    def update_position(self):
+        if self.index < len(self.trajectory):
+            x, y = self.trajectory[self.index]
+            self.ball.setData([x], [y])  # move ball
+            self.index += 1
+        else:
+            self.timer.stop()
