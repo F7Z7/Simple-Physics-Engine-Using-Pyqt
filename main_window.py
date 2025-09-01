@@ -79,22 +79,22 @@ class MainWindow(QMainWindow):
 
     def launch_btn(self):
         try:
-            angle = float(self.angle_input.text())
-        except ValueError:
-            QMessageBox.warning(self, "Warning", "Please enter a valid angle (degrees)")
-            return
+            angle_text = self.angle_input.text().strip()
+            speed_text = self.speed_input.text().strip()
 
-        try:
-            speed = float(self.speed_input.text())
-        except ValueError:
-            QMessageBox.warning(self, "Warning", "Please enter a valid speed")
-            return
+            # fallback to defaults if empty
+            angle = float(angle_text) if angle_text != "" else 45
+            speed = float(speed_text) if speed_text != "" else 20
 
-        if angle == 0 or speed == 0:
+            # update projectile
             self.projectile.default_condtions(speed=speed, deg_ang=angle)
 
+        except ValueError:
+            QMessageBox.warning(self, "Warning", "Please enter valid numbers for angle and speed")
+            return
+
         if self.air_resistance:
-            self.points = self.projectile.with_air_resistance(speed,deg_ang)
+            self.points = self.projectile.with_air_resistance(speed=speed,deg_ang=angle)
         else:
             self.points = self.projectile.without_air_resistance()
 
