@@ -11,10 +11,10 @@ class Projectile_Functions():
         self.air_resistance = False
 
     def default_condtions(self, speed, deg_ang=45):
-        launch_angle = math.radians(deg_ang)
+        self.angle = math.radians(deg_ang)
         self.v = speed
-        self.vx = speed * math.cos(launch_angle)
-        self.vx = speed * math.cos(launch_angle)  # basic equations
+        self.vx = speed * math.cos(self.angle)
+        self.vx = speed * math.cos(self.angle)  # basic equations
         self.x, self.y = 0, 0
 
     def with_air_resistance(self):
