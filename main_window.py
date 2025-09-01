@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QMessageBox
-
+from projectile_functions import Projectile_Functions
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -8,6 +8,7 @@ class MainWindow(QMainWindow):
         self.resize(500, 500)
         self.show()
         self.initUI()
+        self.projectile = Projectile_Functions()
 
     def initUI(self):
         central_widget = QWidget()
@@ -36,7 +37,12 @@ class MainWindow(QMainWindow):
         self.main_layout.addStretch(1)
         self.main_layout.addLayout(self.button_layout)
 
-    def launch_btn(self):
+    def launch_btn(self,air_resistance):
+        if air_resistance:
+            self.projectile.with_air_resistance()
+        else:
+            self.projectile.without_air_resistance()
+
         print("Launching button")
     def reset_btn(self):
         self.gravity = True
