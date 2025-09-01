@@ -47,8 +47,8 @@ class MainWindow(QMainWindow):
             line.setReadOnly(True)
             self.stats_layout.addWidget(line)
 
-    def launch_btn(self,air_resistance):
-        if air_resistance:
+    def launch_btn(self):
+        if self.air_resistance:
             self.projectile.with_air_resistance()
         else:
             self.projectile.without_air_resistance()
