@@ -6,4 +6,3 @@ class Projectile_Functions():
         self.ax, self.ay = 0, 0  # accelerations
         self.G = 9.81  # gravity (m/s^2)
         self.air_resistance = False  # toggle (can connect to GUI)
-
