@@ -10,7 +10,7 @@ class Projectile_Functions():
         self.G = 9.81  # gravity
         self.air_resistance = False
 
-    def default_condtions(self, speed, deg_ang=45):
+    def default_condtions(self, speed=30, deg_ang=45):
         self.angle = math.radians(deg_ang)
         self.v = speed
         self.vx = speed * math.cos(self.angle)
@@ -38,11 +38,13 @@ class Projectile_Functions():
             "Horizontal Velocity": round(vx, 3),
         }
 
-    def without_air_resistance(self, dt=0.1):
+    def without_air_resistance(self, dt=0.05):
         points = []
         self.vx = self.v * math.cos(self.angle)
         self.vy = self.v * math.sin(self.angle)
         self.x, self.y = 0, 0
+        self.ax = 0
+        self.ay = -self.G
         while self.y >= 0:
             self.vx += self.ax * dt
             self.vy += self.ay * dt
