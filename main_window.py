@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QMessageBox, QLabel, QLineEdit
 from projectile_functions import Projectile_Functions
-
+import pyqtgraph as pg
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -20,7 +20,19 @@ class MainWindow(QMainWindow):
         self.air_resistance=True
 
 
+
         self.main_layout = QVBoxLayout(central_widget)
+
+        self.plot_widget = pg.PlotWidget()
+        self.main_layout.addWidget(self.plot_widget)
+
+
+        self.plot_widget.setBackground("w")
+
+        # Create curve (trajectory line) and ball (point)
+        self.curve = self.plot_widget.plot([], [], pen='r')
+        self.ball = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='b')
+
 
         self.button_layout = QHBoxLayout()
         self.buttons = {
