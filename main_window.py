@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QTimer
+from PyQt5.QtGui import QDoubleValidator
 from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QMessageBox, QLabel, QLineEdit, \
     QComboBox
 from projectile_functions import Projectile_Functions
@@ -21,17 +22,130 @@ class MainWindow(QMainWindow):
     def initUI(self):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
+        self.setStyleSheet("""
+                QMainWindow {
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #f0f4f8, stop:1 #e2e8f0);
+        }
+        
+        QGroupBox {
+            font-weight: bold;
+            font-size: 14px;
+            color: #2d3748;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+            margin-top: 10px;
+            padding-top: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        QGroupBox::title {
+            subcontrol-origin: margin;
+            left: 10px;
+            padding: 0 8px 0 8px;
+        }
+        
+        QPushButton {
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #4299e1, stop:1 #3182ce);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 10px 20px;
+            min-width: 100px;
+            min-height: 35px;
+        }
+        
+        QPushButton:hover {
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #63b3ed, stop:1 #4299e1);
+            transform: translateY(-1px);
+        }
+        
+        QPushButton:pressed {
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #2b77a4, stop:1 #2c5aa0);
+        }
+        
+        QPushButton#launchButton {
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #48bb78, stop:1 #38a169);
+            font-size: 14px;
+            font-weight: bold;
+            min-width: 120px;
+        }
+        
+        QPushButton#launchButton:hover {
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #68d391, stop:1 #48bb78);
+        }
+        
+        QPushButton#resetButton {
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #ed8936, stop:1 #dd6b20);
+        }
+        
+        QPushButton#resetButton:hover {
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #fbb040, stop:1 #ed8936);
+        }
+        
+        QLineEdit {
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 12px;
+            background-color: white;
+            selection-background-color: #4299e1;
+        }
+        
+        QLineEdit:focus {
+            border-color: #4299e1;
+            outline: none;
+        }
+        
+        QLineEdit:read-only {
+            background-color: #f7fafc;
+            color: #4a5568;
+        }
+        
+        QComboBox {
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 12px;
+            background-color: white;
+            min-width: 150px;
+        }
+        
+        QComboBox:focus {
+            border-color: #4299e1;
+        }
+
+        QLabel {
+            font-size: 12px;
+            font-weight: bold;
+            color: #2d3748;
+            padding: 5px;
+        }
+        
+            """)
 
         # flags
         self.gravity = True
         self.air_resistance = True
 
-        self.main_layout = QVBoxLayout(central_widget)
+        self.main_layout = QHBoxLayout(central_widget)
 
         self.plot_widget = pg.PlotWidget()
         self.main_layout.addWidget(self.plot_widget)
 
         self.plot_widget.setBackground("w")
+        self.plot_widget.setLabel("bottom", "X Distance (m)")
+        self.plot_widget.setLabel("left", "Y Height (m)")
+        self.plot_widget.showGrid(x=True, y=True)
 
         # Create curve (trajectory line) and ball (point)
         self.curve = self.plot_widget.plot([], [], pen='r')
@@ -40,21 +154,23 @@ class MainWindow(QMainWindow):
         self.ball_air = None
         self.ball_no_air = None
 
-        self.input_layout = QHBoxLayout()
+        self.input_layout = QVBoxLayout()
 
-        self.input_layout.addWidget(QLabel("Angle"))
+        self.input_layout.addWidget(QLabel("Angle (°)"))
         self.angle_input = QLineEdit()
         self.angle_input.setPlaceholderText("Enter Launch Angle")
+        self.angle_input.setValidator(QDoubleValidator(0, 90, 2))
         self.input_layout.addWidget(self.angle_input)
 
-        self.input_layout.addWidget(QLabel("Speed"))
+        self.input_layout.addWidget(QLabel("Speed (m/s)"))
         self.speed_input = QLineEdit()
         self.speed_input.setPlaceholderText("Enter Launch Velocity")
+        self.speed_input.setValidator(QDoubleValidator(0, 1000, 2))
         self.input_layout.addWidget(self.speed_input)
 
         self.main_layout.addLayout(self.input_layout)
 
-        self.button_layout = QHBoxLayout()
+        self.button_layout = QVBoxLayout()
         self.buttons = {
             "Launch": self.launch_btn,
             "Reset Settings": self.reset_btn,
