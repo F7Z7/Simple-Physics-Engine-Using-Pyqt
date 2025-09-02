@@ -1,5 +1,6 @@
 from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QMessageBox, QLabel, QLineEdit
+from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QMessageBox, QLabel, QLineEdit, \
+    QComboBox
 from projectile_functions import Projectile_Functions
 import pyqtgraph as pg
 
@@ -53,13 +54,18 @@ class MainWindow(QMainWindow):
         self.buttons = {
             "Launch": self.launch_btn,
             "Reset Settings": self.reset_btn,
-            "Air Resistance": self.air_resistance_btn,
+
         }
 
         for name, fn in self.buttons.items():
             btn = QPushButton(name)
             btn.clicked.connect(fn)
             self.button_layout.addWidget(btn)
+
+        self.air_resistance_select = QComboBox()
+        self.air_resistance_select.addItems(["Air Resistance","Without Air Resistance","Both"])
+        self.air_resistance_select.currentIndexChanged.connect(self.air_resistance_btn)
+        self.button_layout.addWidget(self.air_resistance_select)
 
         self.show_trajectory_btn=QPushButton("Hide Trajectory")
         self.show_trajectory_btn.clicked.connect(self.show_trajectory)
@@ -99,6 +105,13 @@ class MainWindow(QMainWindow):
             self.points = self.projectile.with_air_resistance(speed=speed,deg_ang=angle)
         else:
             self.points = self.projectile.without_air_resistance(speed=speed,deg_ang=angle)
+        if self.both_cases:
+            self.points = self.projectile.with_air_resistance(speed=speed,deg_ang=angle)
+            self.points = self.projectile.without_air_resistance(speed=speed,deg_ang=angle)
+
+
+
+
 
         # here the points are returned as an array of two x and y at index 0 and 1
         x_vals = [p[0] for p in self.points]
@@ -119,9 +132,15 @@ class MainWindow(QMainWindow):
 
 
     def air_resistance_btn(self):
-        self.air_resistance = not self.air_resistance  # toggle
-        state = "ON" if self.air_resistance else "OFF"
-        print(f"💨 Air Resistance is now {state}")
+        self.air_resistance_select_input=self.air_resistance_select.currentText()
+        self.both_cases=False
+
+        if self.air_resistance_select_input == "Air Resistance":
+            self.air_resistance = True
+        elif self.air_resistance_select_input == "Without Air Resistance":
+            self.air_resistance = False
+        else:
+            self.both_cases = True
 
     def update_position(self):
         if self.index < len(self.points):
