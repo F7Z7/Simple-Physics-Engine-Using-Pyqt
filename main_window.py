@@ -63,6 +63,10 @@ class MainWindow(QMainWindow):
             btn.clicked.connect(fn)
             self.button_layout.addWidget(btn)
 
+        self.show_trajectory_btn=QPushButton("Show Trajectory")
+        self.show_trajectory_btn.clicked.connect(self.show_trajectory)
+        self.button_layout.addWidget(self.show_trajectory_btn)
+
         self.main_layout.addStretch(1)
         self.main_layout.addLayout(self.button_layout)
 
@@ -133,3 +137,6 @@ class MainWindow(QMainWindow):
             self.index += 1
         else:
             self.timer.stop()
+
+    def show_trajectory(self):
+        pass
