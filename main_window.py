@@ -14,6 +14,10 @@ class MainWindow(QMainWindow):
         self.show()
         self.initUI()
 
+        self.points_air = []
+        self.points_no_air = []
+        self.both_cases = False
+
     def initUI(self):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
@@ -32,6 +36,9 @@ class MainWindow(QMainWindow):
         # Create curve (trajectory line) and ball (point)
         self.curve = self.plot_widget.plot([], [], pen='r')
         self.ball = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='b')
+
+        self.ball_air = None
+        self.ball_no_air = None
 
         self.input_layout = QHBoxLayout()
 
@@ -90,28 +97,48 @@ class MainWindow(QMainWindow):
         try:
             angle_text = self.angle_input.text().strip()
             speed_text = self.speed_input.text().strip()
-
-            # fallback to defaults if empty
             angle = float(angle_text) if angle_text != "" else 45
             speed = float(speed_text) if speed_text != "" else 20
-
-            # update projectile
-
         except ValueError:
             QMessageBox.warning(self, "Warning", "Please enter valid numbers for angle and speed")
             return
 
-        if self.air_resistance:
-            self.points = self.projectile.with_air_resistance(speed=speed,deg_ang=angle)
-        else:
-            self.points = self.projectile.without_air_resistance(speed=speed,deg_ang=angle)
+        # Clear previous plots
+        self.plot_widget.clear()
+        self.plot_widget.addLegend()
+
+        self.index = 0  # reset animation
+
         if self.both_cases:
-            self.points = self.projectile.with_air_resistance(speed=speed,deg_ang=angle)
-            self.points = self.projectile.without_air_resistance(speed=speed,deg_ang=angle)
+            # Compute both trajectories
+            self.points_air = self.projectile.with_air_resistance(speed=speed, deg_ang=angle)
+            self.points_no_air = self.projectile.without_air_resistance(speed=speed, deg_ang=angle)
 
+            # Plot curves
+            x_air, y_air = zip(*self.points_air)
+            self.curve_air = self.plot_widget.plot(x_air, y_air, pen='b', name="With Air Resistance")
+            x_no, y_no = zip(*self.points_no_air)
+            self.curve_no_air = self.plot_widget.plot(x_no, y_no, pen='r', name="Without Air Resistance")
 
+            # Balls
+            self.ball_air = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='b')
+            self.ball_no_air = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='r')
 
+        else:
+            if self.air_resistance:
+                self.points_air = self.projectile.with_air_resistance(speed=speed, deg_ang=angle)
+                x_air, y_air = zip(*self.points_air)
+                self.curve_air = self.plot_widget.plot(x_air, y_air, pen='b', name="With Air Resistance")
+                self.ball_air = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='b')
+                self.points_no_air = []
+            else:
+                self.points_no_air = self.projectile.without_air_resistance(speed=speed, deg_ang=angle)
+                x_no, y_no = zip(*self.points_no_air)
+                self.curve_no_air = self.plot_widget.plot(x_no, y_no, pen='r', name="Without Air Resistance")
+                self.ball_no_air = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='r')
+                self.points_air = []
 
+        self.timer.start(50)
 
         # here the points are returned as an array of two x and y at index 0 and 1
         x_vals = [p[0] for p in self.points]
@@ -143,20 +170,21 @@ class MainWindow(QMainWindow):
             self.both_cases = True
 
     def update_position(self):
-        if self.index < len(self.points):
-            x, y = self.points[self.index]
-            self.ball.setData([x], [y])  # move ball
-            self.index += 1
+        moved=False
+        if self.index < len(self.points_air):
+            x, y = self.points_air[self.index]
+            if self.ball_air:
+                self.ball_air.setData([x], [y])
+            moved=True
 
-            if self.curve.isVisible():
-                x_vals = [p[0] for p in self.points[:self.index + 1]]
-                y_vals = [p[1] for p in self.points[:self.index + 1]]
-                self.curve.setData(x_vals, y_vals)
-            else:
-                self.curve.clear()
-        else:
+        if self.index < len(self.points_no_air):
+            x, y = self.points_no_air[self.index]
+            if self.ball_air:
+                self.ball_no_air.setData([x], [y])
+            moved = True
+        self.index += 1
+        if not moved:
             self.timer.stop()
-
     def show_trajectory(self):
         is_visible=self.curve.isVisible()
         self.curve.setVisible(not is_visible)
