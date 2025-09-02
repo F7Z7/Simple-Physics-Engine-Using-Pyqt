@@ -10,7 +10,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Simple Physics Engine")
         self.resize(500, 500)
         self.projectile = Projectile_Functions()
-        self.projectile.default_condtions(speed=20, deg_ang=45)
         self.show()
         self.initUI()
 
@@ -70,12 +69,13 @@ class MainWindow(QMainWindow):
         self.main_layout.addLayout(self.button_layout)
 
         self.stats_layout = QHBoxLayout()
-        stats_out = self.projectile.stats()
-        for name, stat in stats_out.items():
-            self.stats_layout.addWidget(QLabel(name))
-            line = QLineEdit(str(stat))
-            line.setReadOnly(True)
-            self.stats_layout.addWidget(line)
+        #the stats layout will be set up after completion of the main modules
+        # stats_out = self.projectile.stats()
+        # for name, stat in stats_out.items():
+        #     self.stats_layout.addWidget(QLabel(name))
+        #     line = QLineEdit(str(stat))
+        #     line.setReadOnly(True)
+        #     self.stats_layout.addWidget(line)
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_position)
