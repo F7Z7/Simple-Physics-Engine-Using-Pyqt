@@ -54,7 +54,6 @@ class MainWindow(QMainWindow):
         self.buttons = {
             "Launch": self.launch_btn,
             "Reset Settings": self.reset_btn,
-            "Gravity": self.gravity_btn,
             "Air Resistance": self.air_resistance_btn,
         }
 
@@ -118,12 +117,7 @@ class MainWindow(QMainWindow):
         self.air_resistance = True
         self.curve.clear()
         self.ball.clear()
-        print("Settings reset -> Gravity=ON, Air Resistance=ON")
 
-    def gravity_btn(self):
-        self.gravity = not self.gravity
-        state = "ON" if self.gravity else "OFF"
-        print(f"🌍 Gravity is now {state}")
 
     def air_resistance_btn(self):
         self.air_resistance = not self.air_resistance  # toggle
