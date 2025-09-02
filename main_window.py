@@ -90,7 +90,6 @@ class MainWindow(QMainWindow):
             speed = float(speed_text) if speed_text != "" else 20
 
             # update projectile
-            self.projectile.default_condtions(speed=speed, deg_ang=angle)
 
         except ValueError:
             QMessageBox.warning(self, "Warning", "Please enter valid numbers for angle and speed")
@@ -99,7 +98,7 @@ class MainWindow(QMainWindow):
         if self.air_resistance:
             self.points = self.projectile.with_air_resistance(speed=speed,deg_ang=angle)
         else:
-            self.points = self.projectile.without_air_resistance()
+            self.points = self.projectile.without_air_resistance(speed=speed,deg_ang=angle)
 
         # here the points are returned as an array of two x and y at index 0 and 1
         x_vals = [p[0] for p in self.points]

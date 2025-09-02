@@ -14,7 +14,7 @@ class Projectile_Functions():
         self.angle = math.radians(deg_ang)
         self.v = speed
         self.vx = speed * math.cos(self.angle)
-        self.vx = speed * math.cos(self.angle)  # basic equations
+        self.vx = speed * math.cos(self.angle)
         self.x, self.y = 0, 0
 
     def with_air_resistance(self):
@@ -38,10 +38,11 @@ class Projectile_Functions():
             "Horizontal Velocity": round(vx, 3),
         }
 
-    def without_air_resistance(self, dt=0.05):
+    def without_air_resistance(self, dt=0.05,speed=30, deg_ang=45):
         points = []
-        self.vx = self.v * math.cos(self.angle)
-        self.vy = self.v * math.sin(self.angle)
+        angle = math.radians(deg_ang)
+        self.vx = speed * math.cos(angle)
+        self.vy = speed * math.sin(angle)
         self.x, self.y = 0, 0
         self.ax = 0
         self.ay = -self.G
