@@ -42,18 +42,15 @@ class MainWindow(QMainWindow):
 
         self.input_layout = QHBoxLayout()
 
-
         self.input_layout.addWidget(QLabel("Angle"))
         self.angle_input = QLineEdit()
         self.angle_input.setPlaceholderText("Enter Launch Angle")
         self.input_layout.addWidget(self.angle_input)
 
-
         self.input_layout.addWidget(QLabel("Speed"))
         self.speed_input = QLineEdit()
         self.speed_input.setPlaceholderText("Enter Launch Velocity")
         self.input_layout.addWidget(self.speed_input)
-
 
         self.main_layout.addLayout(self.input_layout)
 
@@ -70,11 +67,11 @@ class MainWindow(QMainWindow):
             self.button_layout.addWidget(btn)
 
         self.air_resistance_select = QComboBox()
-        self.air_resistance_select.addItems(["Air Resistance","Without Air Resistance","Both"])
+        self.air_resistance_select.addItems(["Air Resistance", "Without Air Resistance", "Both"])
         self.air_resistance_select.currentIndexChanged.connect(self.air_resistance_btn)
         self.button_layout.addWidget(self.air_resistance_select)
 
-        self.show_trajectory_btn=QPushButton("Hide Trajectory")
+        self.show_trajectory_btn = QPushButton("Hide Trajectory")
         self.show_trajectory_btn.clicked.connect(self.show_trajectory)
         self.button_layout.addWidget(self.show_trajectory_btn)
 
@@ -82,7 +79,7 @@ class MainWindow(QMainWindow):
         self.main_layout.addLayout(self.button_layout)
 
         self.stats_layout = QHBoxLayout()
-        #the stats layout will be set up after completion of the main modules
+        # the stats layout will be set up after completion of the main modules
         # stats_out = self.projectile.stats()
         # for name, stat in stats_out.items():
         #     self.stats_layout.addWidget(QLabel(name))
@@ -115,10 +112,8 @@ class MainWindow(QMainWindow):
             self.points_no_air = self.projectile.without_air_resistance(speed=speed, deg_ang=angle)
 
             # Plot curves
-            x_air, y_air = zip(*self.points_air)
-            self.curve_air = self.plot_widget.plot(x_air, y_air, pen='b', name="With Air Resistance")
-            x_no, y_no = zip(*self.points_no_air)
-            self.curve_no_air = self.plot_widget.plot(x_no, y_no, pen='r', name="Without Air Resistance")
+            self.curve_air = self.plot_widget.plot([], [], pen='b', name="With Air Resistance")
+            self.curve_no_air = self.plot_widget.plot([], [], pen='r', name="Without Air Resistance")
 
             # Balls
             self.ball_air = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='b')
@@ -127,14 +122,12 @@ class MainWindow(QMainWindow):
         else:
             if self.air_resistance:
                 self.points_air = self.projectile.with_air_resistance(speed=speed, deg_ang=angle)
-                x_air, y_air = zip(*self.points_air)
-                self.curve_air = self.plot_widget.plot(x_air, y_air, pen='b', name="With Air Resistance")
+                self.curve_air = self.plot_widget.plot([], [], pen='b', name="With Air Resistance")
                 self.ball_air = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='b')
                 self.points_no_air = []
             else:
                 self.points_no_air = self.projectile.without_air_resistance(speed=speed, deg_ang=angle)
-                x_no, y_no = zip(*self.points_no_air)
-                self.curve_no_air = self.plot_widget.plot(x_no, y_no, pen='r', name="Without Air Resistance")
+                self.curve_no_air = self.plot_widget.plot([], [], pen='r', name="Without Air Resistance")
                 self.ball_no_air = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='r')
                 self.points_air = []
 
@@ -157,10 +150,9 @@ class MainWindow(QMainWindow):
         self.curve.clear()
         self.ball.clear()
 
-
     def air_resistance_btn(self):
-        self.air_resistance_select_input=self.air_resistance_select.currentText()
-        self.both_cases=False
+        self.air_resistance_select_input = self.air_resistance_select.currentText()
+        self.both_cases = False
 
         if self.air_resistance_select_input == "Air Resistance":
             self.air_resistance = True
@@ -170,23 +162,30 @@ class MainWindow(QMainWindow):
             self.both_cases = True
 
     def update_position(self):
-        moved=False
+        moved = False
         if self.index < len(self.points_air):
             x, y = self.points_air[self.index]
             if self.ball_air:
                 self.ball_air.setData([x], [y])
-            moved=True
+                x_vals = [p[0] for p in self.points_air[:self.index + 1]]
+                y_vals = [p[1] for p in self.points_air[:self.index + 1]]
+                self.curve_air.setData(x_vals, y_vals)
+            moved = True
 
         if self.index < len(self.points_no_air):
             x, y = self.points_no_air[self.index]
             if self.ball_air:
                 self.ball_no_air.setData([x], [y])
+                x_vals = [p[0] for p in self.points_no_air[:self.index + 1]]
+                y_vals = [p[1] for p in self.points_no_air[:self.index + 1]]
+                self.curve_no_air.setData(x_vals, y_vals)
             moved = True
         self.index += 1
         if not moved:
             self.timer.stop()
+
     def show_trajectory(self):
-        is_visible=self.curve.isVisible()
+        is_visible = self.curve.isVisible()
         self.curve.setVisible(not is_visible)
         if is_visible:
             self.show_trajectory_btn.setText("Show Trajectory")
