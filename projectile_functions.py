@@ -10,8 +10,25 @@ class Projectile_Functions():
         self.G = 9.81  # gravity
         self.air_resistance = False
 
-    def with_air_resistance(self):
-        pass
+    def with_air_resistance(self, dt=0.05, speed=30, deg_ang=45, m=1, k=0.1):
+        points = []
+        angle = math.radians(deg_ang)
+        self.vx = speed * math.cos(angle)
+        self.vy = speed * math.sin(angle)
+        self.x, self.y = 0, 0
+
+        while self.y >= 0:
+            ax = - (k / m) * self.vx
+            ay = -self.G - (k / m) * self.vy
+
+            self.vx += ax * dt
+            self.vy += ay * dt
+            self.x += self.vx * dt
+            self.y += self.vy * dt
+
+            points.append((self.x, self.y))
+
+        return points
 
     def stats(self):
         v0 = self.v
