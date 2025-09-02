@@ -18,6 +18,7 @@ class MainWindow(QMainWindow):
         self.points_air = []
         self.points_no_air = []
         self.both_cases = False
+        self.TIMER_INTERVAL=50
 
     def initUI(self):
         central_widget = QWidget()
@@ -260,8 +261,7 @@ class MainWindow(QMainWindow):
         self.curve.setData(x_vals, y_vals)
 
         self.index = 0
-        self.timer.start(50)  # update every 50 ms
-
+        self.timer.start(self.TIMER_INTERVAL)
         print("Launching button")
 
     def reset_btn(self):

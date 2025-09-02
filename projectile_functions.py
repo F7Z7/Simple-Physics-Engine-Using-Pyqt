@@ -9,6 +9,7 @@ class Projectile_Functions():
         self.ax, self.ay = 0, 0  # accelerations
         self.G = 9.81  # gravity
         self.air_resistance = False
+        self.TIME_STEP = 0.05
 
     def with_air_resistance(self, dt=0.05, speed=30, deg_ang=45, m=1, k=0.1):
         points = []
