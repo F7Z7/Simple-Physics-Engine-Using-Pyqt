@@ -139,69 +139,73 @@ class MainWindow(QMainWindow):
 
         self.main_layout = QHBoxLayout(central_widget)
 
-        self.plot_widget = pg.PlotWidget()
-        self.main_layout.addWidget(self.plot_widget)
+        # --- Left controls panel ---
+        self.controls_layout = QVBoxLayout()
 
+        # Input fields
+        # Angle row
+        angle_row = QHBoxLayout()
+        angle_label = QLabel("Angle (°):")
+        self.angle_input = QLineEdit()
+        self.angle_input.setPlaceholderText("Enter Launch Angle")
+        self.angle_input.setValidator(QDoubleValidator(0, 90, 2))
+        self.angle_input.setFixedWidth(100)  # keeps it compact
+        angle_row.addWidget(angle_label)
+        angle_row.addWidget(self.angle_input)
+        self.controls_layout.addLayout(angle_row)
+
+        # Speed row
+        speed_row = QHBoxLayout()
+        speed_label = QLabel("Speed (m/s):")
+        self.speed_input = QLineEdit()
+        self.speed_input.setPlaceholderText("Enter Launch Velocity")
+        self.speed_input.setValidator(QDoubleValidator(0, 1000, 2))
+        self.speed_input.setFixedWidth(100)
+        speed_row.addWidget(speed_label)
+        speed_row.addWidget(self.speed_input)
+        self.controls_layout.addLayout(speed_row)
+
+        # Buttons
+        self.launch_button = QPushButton("Launch")
+        self.launch_button.setObjectName("launchButton")
+        self.launch_button.clicked.connect(self.launch_btn)
+        self.controls_layout.addWidget(self.launch_button)
+
+        self.reset_button = QPushButton("Reset Settings")
+        self.reset_button.setObjectName("resetButton")
+        self.reset_button.clicked.connect(self.reset_btn)
+        self.controls_layout.addWidget(self.reset_button)
+
+        # Dropdown
+        self.air_resistance_select = QComboBox()
+        self.air_resistance_select.addItems(["Air Resistance", "Without Air Resistance", "Both"])
+        self.air_resistance_select.currentIndexChanged.connect(self.air_resistance_btn)
+        self.controls_layout.addWidget(self.air_resistance_select)
+
+        # Show/hide trajectory
+        self.show_trajectory_btn = QPushButton("Hide Trajectory")
+        self.show_trajectory_btn.clicked.connect(self.show_trajectory)
+        self.controls_layout.addWidget(self.show_trajectory_btn)
+
+        # Optional: add stats panel later here
+        self.stats_layout = QVBoxLayout()
+        self.controls_layout.addLayout(self.stats_layout)
+
+        # Compact fixed width
+        controls_widget = QWidget()
+        controls_widget.setLayout(self.controls_layout)
+        controls_widget.setFixedWidth(200)
+
+        # --- Right plot panel ---
+        self.plot_widget = pg.PlotWidget()
         self.plot_widget.setBackground("w")
         self.plot_widget.setLabel("bottom", "X Distance (m)")
         self.plot_widget.setLabel("left", "Y Height (m)")
         self.plot_widget.showGrid(x=True, y=True)
 
-        # Create curve (trajectory line) and ball (point)
-        self.curve = self.plot_widget.plot([], [], pen='r')
-        self.ball = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='b')
-
-        self.ball_air = None
-        self.ball_no_air = None
-
-        self.input_layout = QVBoxLayout()
-
-        self.input_layout.addWidget(QLabel("Angle (°)"))
-        self.angle_input = QLineEdit()
-        self.angle_input.setPlaceholderText("Enter Launch Angle")
-        self.angle_input.setValidator(QDoubleValidator(0, 90, 2))
-        self.input_layout.addWidget(self.angle_input)
-
-        self.input_layout.addWidget(QLabel("Speed (m/s)"))
-        self.speed_input = QLineEdit()
-        self.speed_input.setPlaceholderText("Enter Launch Velocity")
-        self.speed_input.setValidator(QDoubleValidator(0, 1000, 2))
-        self.input_layout.addWidget(self.speed_input)
-
-        self.main_layout.addLayout(self.input_layout)
-
-        self.button_layout = QVBoxLayout()
-        self.buttons = {
-            "Launch": self.launch_btn,
-            "Reset Settings": self.reset_btn,
-
-        }
-
-        for name, fn in self.buttons.items():
-            btn = QPushButton(name)
-            btn.clicked.connect(fn)
-            self.button_layout.addWidget(btn)
-
-        self.air_resistance_select = QComboBox()
-        self.air_resistance_select.addItems(["Air Resistance", "Without Air Resistance", "Both"])
-        self.air_resistance_select.currentIndexChanged.connect(self.air_resistance_btn)
-        self.button_layout.addWidget(self.air_resistance_select)
-
-        self.show_trajectory_btn = QPushButton("Hide Trajectory")
-        self.show_trajectory_btn.clicked.connect(self.show_trajectory)
-        self.button_layout.addWidget(self.show_trajectory_btn)
-
-        self.main_layout.addStretch(1)
-        self.main_layout.addLayout(self.button_layout)
-
-        self.stats_layout = QHBoxLayout()
-        # the stats layout will be set up after completion of the main modules
-        # stats_out = self.projectile.stats()
-        # for name, stat in stats_out.items():
-        #     self.stats_layout.addWidget(QLabel(name))
-        #     line = QLineEdit(str(stat))
-        #     line.setReadOnly(True)
-        #     self.stats_layout.addWidget(line)
+        # Add to main layout
+        self.main_layout.addWidget(controls_widget)
+        self.main_layout.addWidget(self.plot_widget, stretch=1)
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_position)
