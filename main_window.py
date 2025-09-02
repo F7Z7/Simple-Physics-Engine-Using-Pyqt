@@ -11,7 +11,6 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Simple Physics Engine")
         self.resize(500, 500)
-        self.projectile = Projectile_Functions()
         self.show()
         self.initUI()
 
@@ -229,8 +228,8 @@ class MainWindow(QMainWindow):
 
         if self.both_cases:
             # Compute both trajectories
-            self.points_air = self.projectile.with_air_resistance(speed=speed, deg_ang=angle)
-            self.points_no_air = self.projectile.without_air_resistance(speed=speed, deg_ang=angle)
+            self.points_air = Projectile_Functions.with_air_resistance(speed=speed, deg_ang=angle)
+            self.points_no_air = Projectile_Functions.without_air_resistance(speed=speed, deg_ang=angle)
 
             # Plot curves
             self.curve_air = self.plot_widget.plot([], [], pen='b', name="With Air Resistance")
@@ -242,12 +241,12 @@ class MainWindow(QMainWindow):
 
         else:
             if self.air_resistance:
-                self.points_air = self.projectile.with_air_resistance(speed=speed, deg_ang=angle)
+                self.points_air = Projectile_Functions.with_air_resistance(speed=speed, deg_ang=angle)
                 self.curve_air = self.plot_widget.plot([], [], pen='b', name="With Air Resistance")
                 self.ball_air = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='b')
                 self.points_no_air = []
             else:
-                self.points_no_air = self.projectile.without_air_resistance(speed=speed, deg_ang=angle)
+                self.points_no_air = Projectile_Functions.without_air_resistance(speed=speed, deg_ang=angle)
                 self.curve_no_air = self.plot_widget.plot([], [], pen='r', name="Without Air Resistance")
                 self.ball_no_air = self.plot_widget.plot([], [], pen=None, symbol='o', symbolBrush='r')
                 self.points_air = []
