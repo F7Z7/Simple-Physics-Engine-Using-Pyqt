@@ -12,7 +12,7 @@ class Projectile_Functions():
         TIME_STEP = 0.05
 
     @staticmethod
-    def with_air_resistance(self, dt=0.05, speed=30, deg_ang=45, m=1, k=0.1):
+    def with_air_resistance(dt=0.05, speed=30, deg_ang=45, m=1, k=0.1):
         points = []
         G = 9.81
         angle = math.radians(deg_ang)
@@ -48,7 +48,7 @@ class Projectile_Functions():
             "Horizontal Velocity": round(vx, 3),
         }
     @staticmethod
-    def without_air_resistance(self, dt=0.05,speed=30, deg_ang=45):
+    def without_air_resistance(dt=0.05,speed=30, deg_ang=45):
         G = 9.81
         points = []
         angle = math.radians(deg_ang)
