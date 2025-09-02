@@ -135,6 +135,13 @@ class MainWindow(QMainWindow):
             x, y = self.points[self.index]
             self.ball.setData([x], [y])  # move ball
             self.index += 1
+
+            if self.curve.isVisible():
+                x_vals = [p[0] for p in self.points[:self.index + 1]]
+                y_vals = [p[1] for p in self.points[:self.index + 1]]
+                self.curve.setData(x_vals, y_vals)
+            else:
+                self.curve.clear()
         else:
             self.timer.stop()
 
