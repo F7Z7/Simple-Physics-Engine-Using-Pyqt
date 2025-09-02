@@ -63,7 +63,7 @@ class MainWindow(QMainWindow):
             btn.clicked.connect(fn)
             self.button_layout.addWidget(btn)
 
-        self.show_trajectory_btn=QPushButton("Show Trajectory")
+        self.show_trajectory_btn=QPushButton("Hide Trajectory")
         self.show_trajectory_btn.clicked.connect(self.show_trajectory)
         self.button_layout.addWidget(self.show_trajectory_btn)
 
@@ -139,4 +139,9 @@ class MainWindow(QMainWindow):
             self.timer.stop()
 
     def show_trajectory(self):
-        pass
+        is_visible=self.curve.isVisible()
+        self.curve.setVisible(not is_visible)
+        if is_visible:
+            self.show_trajectory_btn.setText("Show Trajectory")
+        else:
+            self.show_trajectory_btn.setText("Hide Trajectory")
