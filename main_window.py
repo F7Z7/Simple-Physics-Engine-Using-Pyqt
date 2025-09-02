@@ -112,7 +112,8 @@ class MainWindow(QMainWindow):
     def reset_btn(self):
         self.gravity = True
         self.air_resistance = True
-        QMessageBox.about(self, "Reset", "Settings have been reset")
+        self.curve.clear()
+        self.ball.clear()
         print("Settings reset -> Gravity=ON, Air Resistance=ON")
 
     def gravity_btn(self):
@@ -126,7 +127,7 @@ class MainWindow(QMainWindow):
         print(f"💨 Air Resistance is now {state}")
 
     def update_position(self):
-        if self.index < len(self.trajectory):
+        if self.index < len(self.points):
             x, y = self.points[self.index]
             self.ball.setData([x], [y])  # move ball
             self.index += 1
