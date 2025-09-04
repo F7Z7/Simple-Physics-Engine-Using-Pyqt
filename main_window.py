@@ -182,10 +182,6 @@ class MainWindow(QMainWindow):
         self.air_resistance_select.currentIndexChanged.connect(self.air_resistance_btn)
         self.controls_layout.addWidget(self.air_resistance_select)
 
-        # Show/hide trajectory
-        self.show_trajectory_btn = QPushButton("Hide Trajectory")
-        self.show_trajectory_btn.clicked.connect(self.show_trajectory)
-        self.controls_layout.addWidget(self.show_trajectory_btn)
 
         # Optional: add stats panel later here
         self.stats_layout = QVBoxLayout()
@@ -278,7 +274,6 @@ class MainWindow(QMainWindow):
 
         self.air_resistance_select.setCurrentIndex(0)
 
-        self.show_trajectory_btn.setText("Hide Trajectory")
 
     def air_resistance_btn(self):
         self.air_resistance_select_input=self.air_resistance_select.currentText()
@@ -311,11 +306,3 @@ class MainWindow(QMainWindow):
         self.index += 1
         if not moved:
             self.timer.stop()
-
-    def show_trajectory(self):
-        is_visible = self.curve.isVisible()
-        self.curve.setVisible(not is_visible)
-        if is_visible:
-            self.show_trajectory_btn.setText("Show Trajectory")
-        else:
-            self.show_trajectory_btn.setText("Hide Trajectory")
