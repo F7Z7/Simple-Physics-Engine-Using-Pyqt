@@ -310,3 +310,7 @@ QPushButton#resetButton:hover {
         self.index += 1
         if not moved:
             self.timer.stop()
+
+    def toggle_stats(self, state):
+        pass
+
