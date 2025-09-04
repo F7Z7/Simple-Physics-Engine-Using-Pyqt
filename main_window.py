@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QDoubleValidator
 from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QMessageBox, QLabel, QLineEdit, \
-    QComboBox
+    QComboBox, QCheckBox
 from projectile_functions import Projectile_Functions
 import pyqtgraph as pg
 
@@ -185,6 +185,10 @@ QPushButton#resetButton:hover {
 
         # Optional: add stats panel later here
         self.stats_layout = QVBoxLayout()
+        self.show_stats=QCheckBox("Show Stats")
+        self.show_stats.setChecked(True)
+        self.show_stats.stateChanged.connect(self.toggle_stats)
+        self.controls_layout.addWidget(self.show_stats)
         self.controls_layout.addLayout(self.stats_layout)
 
         # Compact fixed width
