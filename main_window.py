@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
         self.points_air = []
         self.points_no_air = []
         self.both_cases = False
-        self.TIMER_INTERVAL=50
+        self.TIMER_INTERVAL = 50
 
     def initUI(self):
         central_widget = QWidget()
@@ -183,7 +183,6 @@ QPushButton#resetButton:hover {
         self.air_resistance_select.currentIndexChanged.connect(self.air_resistance_btn)
         self.controls_layout.addWidget(self.air_resistance_select)
 
-
         # Optional: add stats panel later here
         self.stats_layout = QVBoxLayout()
         self.controls_layout.addLayout(self.stats_layout)
@@ -268,16 +267,15 @@ QPushButton#resetButton:hover {
 
         self.points_air = []
         self.points_no_air = []
-        self.both_cases=False
+        self.both_cases = False
 
         self.angle_input.clear()
         self.speed_input.clear()
 
         self.air_resistance_select.setCurrentIndex(0)
 
-
     def air_resistance_btn(self):
-        self.air_resistance_select_input=self.air_resistance_select.currentText()
+        self.air_resistance_select_input = self.air_resistance_select.currentText()
 
         if self.air_resistance_select_input == "Air Resistance":
             self.air_resistance = True
@@ -285,6 +283,7 @@ QPushButton#resetButton:hover {
             self.air_resistance = False
         else:
             self.both_cases = True
+
     def update_position(self):
         moved = False
         if self.index < len(self.points_air):
