@@ -253,12 +253,6 @@ class MainWindow(QMainWindow):
 
         self.timer.start(50)
 
-        # here the points are returned as an array of two x and y at index 0 and 1
-        x_vals = [p[0] for p in self.points]
-        y_vals = [p[1] for p in self.points]
-
-        self.curve.setData(x_vals, y_vals)
-
         self.index = 0
         self.timer.start(self.TIMER_INTERVAL)
         print("Launching button")
@@ -266,12 +260,28 @@ class MainWindow(QMainWindow):
     def reset_btn(self):
         self.gravity = True
         self.air_resistance = True
-        self.curve.clear()
-        self.ball.clear()
+
+        self.timer.stop()
+        self.index = 0
+
+        self.plot_widget.clear()
+        self.plot_widget.setLabel("bottom", "X Distance (m)")
+        self.plot_widget.setLabel("left", "Y Height (m)")
+        self.plot_widget.showGrid(x=True, y=True)
+
+        self.points_air = []
+        self.points_no_air = []
+        self.both_cases=False
+
+        self.angle_input.clear()
+        self.speed_input.clear()
+
+        self.air_resistance_select.setCurrentIndex(0)
+
+        self.show_trajectory_btn.setText("Hide Trajectory")
 
     def air_resistance_btn(self):
-        self.air_resistance_select_input = self.air_resistance_select.currentText()
-        self.both_cases = False
+        self.air_resistance_select_input=self.air_resistance_select.currentText()
 
         if self.air_resistance_select_input == "Air Resistance":
             self.air_resistance = True
@@ -279,7 +289,6 @@ class MainWindow(QMainWindow):
             self.air_resistance = False
         else:
             self.both_cases = True
-
     def update_position(self):
         moved = False
         if self.index < len(self.points_air):
