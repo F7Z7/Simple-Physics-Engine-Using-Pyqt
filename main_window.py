@@ -58,39 +58,40 @@ class MainWindow(QMainWindow):
             min-height: 35px;
         }
         
-        QPushButton:hover {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 #63b3ed, stop:1 #4299e1);
-            transform: translateY(-1px);
-        }
-        
-        QPushButton:pressed {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 #2b77a4, stop:1 #2c5aa0);
-        }
-        
-        QPushButton#launchButton {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 #48bb78, stop:1 #38a169);
-            font-size: 14px;
-            font-weight: bold;
-            min-width: 120px;
-        }
-        
-        QPushButton#launchButton:hover {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 #68d391, stop:1 #48bb78);
-        }
-        
-        QPushButton#resetButton {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 #ed8936, stop:1 #dd6b20);
-        }
-        
-        QPushButton#resetButton:hover {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 #fbb040, stop:1 #ed8936);
-        }
+      QPushButton {
+    background: #3182ce;   /* primary blue */
+    color: white;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+QPushButton:hover {
+    background: #2b6cb0;   /* darker blue on hover */
+}
+
+QPushButton:pressed {
+    background: #2c5282;   /* even darker on press */
+}
+
+QPushButton#launchButton {
+    background: #38a169;   /* green */
+    font-weight: bold;
+    min-width: 120px;
+}
+
+QPushButton#launchButton:hover {
+    background: #2f855a;
+}
+
+QPushButton#resetButton {
+    background: #dd6b20;   /* orange */
+}
+
+QPushButton#resetButton:hover {
+    background: #c05621;
+}
+
         
         QLineEdit {
             border: 2px solid #cbd5e0;
